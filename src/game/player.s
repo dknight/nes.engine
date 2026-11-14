@@ -45,11 +45,11 @@ player_collision_end_x: .res 1
 ;   Y, TILE, ATTR, X
 ;==========================================================================
 player_metasprite:
-    ; Y, TILE, ATTR, X
-    .byte 0, $40, OAM_PALETTE_0, 0
-    .byte 0, $41, OAM_PALETTE_0, 8
-    .byte 8, $50, OAM_PALETTE_0, 0
-    .byte 8, $51, OAM_PALETTE_0, 8
+	; Y, TILE, ATTR, X
+	.byte 0, $40, OAM_PALETTE_0, 0
+	.byte 0, $41, OAM_PALETTE_0, 8
+	.byte 8, $50, OAM_PALETTE_0, 0
+	.byte 8, $51, OAM_PALETTE_0, 8
 
 .segment "CODE"
 
@@ -202,26 +202,26 @@ player_metasprite:
 ;   A, Y
 ;==========================================================================
 .proc player_move_right
-    ; Calculate next position
-    LDA player_x
-    CLC
-    ADC #PLAYER_SPEED
-    STA player_next_x
+	; Calculate next position
+	LDA player_x
+	CLC
+	ADC #PLAYER_SPEED
+	STA player_next_x
 
-    ; Check screen boundary
-    CMP #(PLAYER_MAX_X + 1)
-    BCS @blocked
+	; Check screen boundary
+	CMP #(PLAYER_MAX_X + 1)
+	BCS @blocked
 
-    ; Check horizontal collision
-    JSR player_check_horizontal_collision
-    BCS @blocked
+	; Check horizontal collision
+	JSR player_check_horizontal_collision
+	BCS @blocked
 
-    ; Apply movement
-    LDA player_next_x
-    STA player_x
+	; Apply movement
+	LDA player_next_x
+	STA player_x
 
 @blocked:
-    RTS
+	RTS
 
 .endproc
 
@@ -390,58 +390,58 @@ player_metasprite:
 ;   player_collision_end_y
 ;==========================================================================
 .proc player_check_horizontal_collision
-    ; Determine movement direction
-    LDA player_next_x
-    CMP player_x
-    BCC @moving_left
+	; Determine movement direction
+	LDA player_next_x
+	CMP player_x
+	BCC @moving_left
 
 @moving_right:
-    ; Calculate right edge of the proposed position
-    LDA player_next_x
-    player_add_right_edge (PLAYER_WIDTH - 1)
-    STA player_tile_x
-    JMP @calculate_vertical_range
+	; Calculate right edge of the proposed position
+	LDA player_next_x
+	player_add_right_edge (PLAYER_WIDTH - 1)
+	STA player_tile_x
+	JMP @calculate_vertical_range
 
 @moving_left:
-    ; Calculate left edge of the proposed position
-    LDA player_next_x
-    macro_pixel_to_tile
-    STA player_tile_x
+	; Calculate left edge of the proposed position
+	LDA player_next_x
+	macro_pixel_to_tile
+	STA player_tile_x
 
 @calculate_vertical_range:
-    ; Calculate top tile
-    LDA player_y
-    macro_pixel_to_tile
-    STA player_tile_y
+	; Calculate top tile
+	LDA player_y
+	macro_pixel_to_tile
+	STA player_tile_y
 
-    ; Calculate bottom tile
-    LDA player_y
-    player_add_bottom_edge (PLAYER_HEIGHT - 1)
-    STA player_collision_end_y
+	; Calculate bottom tile
+	LDA player_y
+	player_add_bottom_edge (PLAYER_HEIGHT - 1)
+	STA player_collision_end_y
 
 @check_row:
-    ; Check current tile
-    LDA player_tile_x
-    LDY player_tile_y
-    JSR collisions_is_solid
-    BCS @collision
+	; Check current tile
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @collision
 
-    ; Have we checked the last row?
-    LDA player_tile_y
-    CMP player_collision_end_y
-    BEQ @no_collision
+	; Have we checked the last row?
+	LDA player_tile_y
+	CMP player_collision_end_y
+	BEQ @no_collision
 
-    ; Move to the next row
-    INC player_tile_y
-    JMP @check_row
+	; Move to the next row
+	INC player_tile_y
+	JMP @check_row
 
 @collision:
-    SEC
-    RTS
+	SEC
+	RTS
 
 @no_collision:
-    CLC
-    RTS
+	CLC
+	RTS
 .endproc
 
 ;==========================================================================

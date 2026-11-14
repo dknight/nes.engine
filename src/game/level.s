@@ -36,60 +36,60 @@
 ;   - level_map_01 contains exactly 960 tiles.
 ;==========================================================================
 .proc level_load
-    ; Reset PPU latch
-    LDA PPU_STATUS
+	; Reset PPU latch
+	LDA PPU_STATUS
 
-    ; VRAM = $2000
-    LDA #$20
-    STA PPU_ADDR
-    LDA #$00
-    STA PPU_ADDR
+	; VRAM = $2000
+	LDA #$20
+	STA PPU_ADDR
+	LDA #$00
+	STA PPU_ADDR
 
-    ; Pointer -> level_map_01
-    LDA #<level_map_01
-    STA ptr_lo
-    LDA #>level_map_01
-    STA ptr_hi
+	; Pointer -> level_map_01
+	LDA #<level_map_01
+	STA ptr_lo
+	LDA #>level_map_01
+	STA ptr_hi
 
-    ; Three full pages (3 × 256 = 768 bytes)
-    LDA #$03
-    STA page_count
+	; Three full pages (3 × 256 = 768 bytes)
+	LDA #$03
+	STA page_count
 
 @page_loop:
-    LDY #$00
+	LDY #$00
 
 @page_bytes:
-    ; Read logical tile
-    LDA (ptr_lo),Y
+	; Read logical tile
+	LDA (ptr_lo),Y
 
-    ; Convert to CHR tile
-    TAX
-    LDA tile_to_chr,X
+	; Convert to CHR tile
+	TAX
+	LDA tile_to_chr,X
 
-    ; Write to PPU
-    STA PPU_DATA
+	; Write to PPU
+	STA PPU_DATA
 
-    INY
-    BNE @page_bytes
+	INY
+	BNE @page_bytes
 
-    INC ptr_hi
+	INC ptr_hi
 
-    DEC page_count
-    BNE @page_loop
+	DEC page_count
+	BNE @page_loop
 
-    ; Last 192 bytes
-    LDY #$00
+	; Last 192 bytes
+	LDY #$00
 
 @last_chunk:
-    LDA (ptr_lo),Y
-    TAX
-    LDA tile_to_chr,X
-    STA PPU_DATA
+	LDA (ptr_lo),Y
+	TAX
+	LDA tile_to_chr,X
+	STA PPU_DATA
 
-    INY
-    CPY #$C0
-    BNE @last_chunk
+	INY
+	CPY #$C0
+	BNE @last_chunk
 
-    RTS
+	RTS
 .endproc
 

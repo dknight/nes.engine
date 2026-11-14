@@ -81,14 +81,14 @@ row_offset_hi:
 ;   scratch00
 ;==========================================================================
 .proc collisions_get_tile
-    STA scratch00
+	STA scratch00
 
-    JSR collisions_get_row_ptr
+	JSR collisions_get_row_ptr
 
-    LDY scratch00
-    LDA (collisions_row_ptr),Y
+	LDY scratch00
+	LDA (collisions_row_ptr),Y
 
-    RTS
+	RTS
 .endproc
 
 ;==========================================================================
@@ -104,16 +104,16 @@ row_offset_hi:
 ;   A
 ;==========================================================================
 .proc collisions_get_row_ptr
-    LDA collisions_ptr
-    CLC
-    ADC row_offset_lo,Y
-    STA collisions_row_ptr
+	LDA collisions_ptr
+	CLC
+	ADC row_offset_lo,Y
+	STA collisions_row_ptr
 
-    LDA collisions_ptr+1
-    ADC row_offset_hi,Y
-    STA collisions_row_ptr+1
+	LDA collisions_ptr+1
+	ADC row_offset_hi,Y
+	STA collisions_row_ptr+1
 
-    RTS
+	RTS
 .endproc
 
 ;==========================================================================
@@ -129,12 +129,12 @@ row_offset_hi:
 ;   A
 ;==========================================================================
 .proc collisions_load_level
-    LDA #<level_map_01
-    STA collisions_ptr
+	LDA #<level_map_01
+	STA collisions_ptr
 
-    LDA #>level_map_01
-    STA collisions_ptr+1
+	LDA #>level_map_01
+	STA collisions_ptr+1
 
-    RTS
+	RTS
 .endproc
 

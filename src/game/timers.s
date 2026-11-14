@@ -25,17 +25,17 @@
 ;   A
 ;==========================================================================
 .proc timers_update
-    INC vblank_counter
+	INC vblank_counter
 
-    LDA game_timer
-    BEQ @reload
+	LDA game_timer
+	BEQ @reload
 
-    DEC game_timer
-    RTS
+	DEC game_timer
+	RTS
 @reload:
-    LDA #GAME_TIMER_COUNT
-    STA game_timer
-    RTS
+	LDA #GAME_TIMER_COUNT
+	STA game_timer
+	RTS
 .endproc
 
 ;==========================================================================
@@ -54,11 +54,11 @@
 ;==========================================================================
 .proc wait_frame
 @wait:
-    LDA frame_ready
-    BEQ @wait
+	LDA frame_ready
+	BEQ @wait
 
-    LDA #$00
-    STA frame_ready
-    RTS
+	LDA #$00
+	STA frame_ready
+	RTS
 .endproc
 
