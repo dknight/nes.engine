@@ -47,7 +47,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.s
 	$(CA65) -g -I $(SRC_DIR) -I $(dir $<) -o $@ $<
 
 $(ROM): $(OBJ)
-	$(LD65) -C $(CFG) -o $@ --dbgfile $@.dbg $^
+	$(LD65) -C $(CFG) -o $@ --dbgfile $@.dbg --mapfile $@.map $^
 
 #--------------------------------------------------------------------------
 # 6502 simulation
@@ -72,11 +72,13 @@ simulate: $(SIM_BIN)
 	echo "Program exited with code: $$status"; \
 	exit 0
 
-.PHONY: all run clean simulate
+.PHONY: all run clean simulate map
 
 #--------------------------------------------------------------------------
 # Goals
 #--------------------------------------------------------------------------
+map: $(ROM)
+	@cat $(ROM).map || echo "Run 'make' to generate build project with map"
 
 run: $(ROM)
 	$(EMU) $(ROM)
