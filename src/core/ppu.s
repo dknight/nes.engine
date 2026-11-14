@@ -1,7 +1,7 @@
 .include "constants.inc"
 
 .import attribute_table
-.import default_palette
+.import palettes
 
 .export ppu_load_palette
 .export ppu_load_attributes
@@ -27,7 +27,7 @@
 	LDX #$00
 
 @palette_loop:
-	LDA default_palette, X
+	LDA palettes, X
 	STA PPU_DATA
 	
 	INX

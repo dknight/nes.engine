@@ -1,12 +1,12 @@
 .segment "RODATA"
 
-.export default_palette
+.export palettes
 
 ;==========================================================================
 ; Default palette table has 16 entries for backgrounds
 ; and 16 entries for sprites
 ;==========================================================================
-default_palette:
+palettes:
 	; 4 background palettes
 	.byte $0F,$15,$01,$20
 	.byte $0F,$09,$19,$29
@@ -18,4 +18,9 @@ default_palette:
 	.byte $0F,$14,$24,$34
 	.byte $0F,$1B,$2B,$3B
 	.byte $0F,$12,$22,$32
+
+palettes_end:
+	; nop
+
+.assert (palettes_end - palettes) = 32, error, "Palette data must be exactly 32 bytes"
 
