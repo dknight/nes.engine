@@ -7,11 +7,8 @@
 .importzp ptr_lo
 .importzp ptr_hi
 .importzp controller01_state
-.import oam
 .import sprite_draw_meta
 .import collisions_is_solid
-.import collisions_get_tile
-.import collisions_load_level
 
 .exportzp player_x
 .exportzp player_y

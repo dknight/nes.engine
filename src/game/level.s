@@ -5,7 +5,6 @@
 .importzp page_count
 .import tile_to_chr
 .import level_map_01
-.import nametable
 
 .export level_load
 

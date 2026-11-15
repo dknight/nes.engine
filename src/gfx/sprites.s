@@ -1,16 +1,15 @@
 .include "gfx.inc"
 
+.importzp ptr_lo
 .import dma_transfer
 .import oam
-.importzp ptr_lo
-.importzp ptr_hi
 
+.exportzp oam_cursor
 .export sprite_clear_oam
 .export oam_begin
 .export oam_end
 .export sprite_draw
 .export sprite_draw_meta
-.exportzp oam_cursor
 
 .segment "ZEROPAGE"
 

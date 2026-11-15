@@ -1,12 +1,8 @@
 .include "constants.inc"
 
-.import game_init
-.import enemies_draw
-.import player_draw
-.import oam_begin
-.import oam_end
-.import sprite_clear_oam
 .import main
+.import game_init
+.import sprite_clear_oam
 .import ppu_load_attributes
 .import ppu_load_palette
 
@@ -37,6 +33,7 @@ wait_vblank:
 	; clear all RAM to 0
 	LDA #$00
 	LDX #$00
+
 clear_ram:
 	STA $0000,X
 	;STA $0200,X -- $0200 is OAM and cleaned in clear_oam

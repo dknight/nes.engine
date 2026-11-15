@@ -1,7 +1,7 @@
-.import camera_update
-.import projectiles_update
-.import enemies_update
 .import player_update
+.import enemies_update
+.import projectiles_update
+.import camera_update
 
 .export game_tick
 

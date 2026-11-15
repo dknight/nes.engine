@@ -8,7 +8,6 @@
 .import irq
 .import render
 .import game_tick
-.import game_poll
 .import wait_frame
 .import timers_update
 .import input_poll
