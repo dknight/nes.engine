@@ -74,6 +74,11 @@ Build artifacts are saved in the **builds/** directory.
 - `LD65  ?= ld65`  - 6502 Linker.
 - `SIM65 ?= sim65` - 6502 Simulator (not used in this project).
 - `SIM_SRC ?= `    - 6502 Simulator input file (not used in this project).
+- `DEBUG=1`        - Enables simple break points support, like:
+  ```asm
+    @debug:
+      JMP @debug
+  ```
 
 ## Project Structure
 
