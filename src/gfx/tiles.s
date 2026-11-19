@@ -14,10 +14,11 @@ tiles_end:
 
 .export tile_to_chr
 
+; Related to maps level by index
 tile_to_chr:
-	.byte TILE_NOT_USED
-	.byte TILE_FLOOR
-	.byte TILE_WALL
+	.byte TILE_NOT_USED ; lavel map 0
+	.byte TILE_FLOOR    ; level map 1
+	.byte TILE_WALL     ; level map 2, etc.
 
 tile_to_chr_end:
 	; nop
