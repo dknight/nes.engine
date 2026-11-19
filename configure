@@ -6,7 +6,7 @@ REQUIRED_TOOLS=(
     ca65
     ld65
     sim65
-	make
+    make
 )
 
 echo "Checking dependencies..."
@@ -14,13 +14,21 @@ echo "Checking dependencies..."
 for tool in "${REQUIRED_TOOLS[@]}"; do
     if ! command -v "$tool" >/dev/null 2>&1; then
         echo "Error: '$tool' not found."
-        return 1
+        exit 1
     fi
 
     echo "Found: $tool ($(command -v "$tool"))"
 done
 
 echo
+echo "Checking optional dependencies..."
+
+if command -v lua >/dev/null 2>&1; then
+    echo "Found: Lua ($(command -v lua))"
+else
+    echo "Info: Lua not found. Optional Lua-based tools will be unavailable."
+fi
+
+echo
 echo "All dependencies satisfied."
 echo "Configuration completed successfully."
-
