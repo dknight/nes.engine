@@ -50,7 +50,7 @@ basic collision detection.
 
 Optional for tools:
 
-- [Lua language](https://www.lua.org)
+- [Lua](https://www.lua.org)
 
 ## Build
 
