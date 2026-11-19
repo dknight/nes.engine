@@ -1,6 +1,5 @@
-;==========================================================================
-; Import pattern CHR data (tiles)
-;==========================================================================
+.include "tiles.inc"
+
 .segment "TILES"
 
 tiles_start:
@@ -16,9 +15,9 @@ tiles_end:
 .export tile_to_chr
 
 tile_to_chr:
-	.byte $00 ; TILE_NOT_USED
-	.byte $A0 ; TILE_FLOOR
-	.byte $A2 ; TILE_WALL
+	.byte TILE_NOT_USED
+	.byte TILE_FLOOR
+	.byte TILE_WALL
 
 tile_to_chr_end:
 	; nop
