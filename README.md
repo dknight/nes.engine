@@ -48,6 +48,10 @@ basic collision detection.
 - [cc65](https://cc65.github.io/)
 - [GNU Make](https://www.gnu.org/software/make/)
 
+Optional for tools:
+
+- [Lua language](https://www.lua.org)
+
 ## Build
 
 ```
