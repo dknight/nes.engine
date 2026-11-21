@@ -192,10 +192,22 @@ local function main()
 		usage_data
 	)
 
+	table.insert(report, 2, {
+		name = "STACK",
+		used = 0x100,
+		total = 0x100,
+		available = 0,
+		usage = 100,
+		reserved = true,
+	})
+
 	for _, memory in ipairs(report) do
+		local label = memory.reserved and "Reserved" or "Used"
+
 		print(string.format(
-			"%-10s Used: %5d / %5d bytes (%5.1f%%) Available: %5d bytes",
+			"%-10s %-8s %5d / %5d bytes (%5.1f%%) Available: %5d bytes",
 			memory.name,
+			label,
 			memory.used,
 			memory.total,
 			memory.usage,
