@@ -82,17 +82,18 @@ Build artifacts are saved in the **builds/** directory.
 ## Project Structure
 
 ```
-src/
-├── core/       Hardware abstraction and low-level NES functionality
-├── game/       Game-specific logic
-├── gfx/        Graphics and rendering routines
-├── include/    Shared constants, macros, and definitions
-└── main.s      Main game loop
-
-assets/         CHR graphics and other binary assets
-└── patterns.chr
-
-builds/         Build output
+.
+├── assets/         CHR graphics and other binary assets
+├── builds/         Build output
+├── docs/           Project documentation
+├── maps/           Level map source files
+├── src/
+│   ├── core/       Hardware abstraction and low-level NES functionality
+│   ├── game/       Game-specific logic
+│   ├── gfx/        Graphics and rendering routines
+│   ├── include/    Shared constants, macros, and definitions
+│   └── main.s      Main game loop
+└── tools/          Development and build helper scripts
 ```
 
 ## Roadmap
