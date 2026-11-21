@@ -33,6 +33,7 @@ Rather than hiding the NES hardware behind high-level abstractions, this engine 
 - Timer system
 - Tile-based collision detection
 - Modular source code and build system
+- Object pool utilities (WIP)
 
 A simple demo is included where the player can be moved using the D-pad, with
 basic collision detection.
@@ -102,7 +103,6 @@ Planned features:
 - Mapper support
 - Sound engine
 - Animation system
-- Object pool utilities
 - Camera and scrolling support
 
 ## Development
