@@ -1,6 +1,6 @@
 .include "constants.inc"
 
-.import attribute_table
+.import attr_tbl
 .import palettes
 
 .export ppu_load_palette
@@ -50,7 +50,7 @@
 	LDX #$00
 
 @attr_loop:
-	LDA attribute_table, X
+	LDA attr_tbl, X
 	STA PPU_DATA
 
 	INX

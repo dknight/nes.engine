@@ -7,11 +7,29 @@
 .export objects_draw
 .export objects_level_spawn
 
+.importzp ptr_lo
+.importzp ptr_hi
 .importzp sprite_x
 .import sprite_draw
+.import sprite_draw_meta
 .import level_01_objects_x
 .import level_01_objects_y
 .import level_01_objects_type
+.import level_01_objects_type_end
+
+;--------------------------------------------------------------------------
+; Linker-time checks >>>
+;--------------------------------------------------------------------------
+
+.assert (level_01_objects_type_end - level_01_objects_type) <= $FF, lderror, "Level 01 object table exceeds 255 entries"
+
+;--------------------------------------------------------------------------
+; Linker-time checks >>>
+;--------------------------------------------------------------------------
+
+.segment "BSS"
+
+sprite_tile_tmp: .res 1
 
 .segment "ZEROPAGE"
 
@@ -39,6 +57,12 @@ object_tile_tbl:
 	.byte TILE_TREASURE
 	.byte TILE_LIFE
 object_tile_tbl_end:
+
+object_life_metasprite:
+	.byte 0, $42, PALETTE_1, 0
+	.byte 0, $43, PALETTE_1, 8
+	.byte 8, $52, PALETTE_1, 0
+	.byte 8, $53, PALETTE_1, 8
 
 ;--------------------------------------------------------------------------
 ; Compile-time checks >>>
@@ -140,7 +164,9 @@ object_y:      .res OBJECT_POOL_SIZE
 ;
 ;==========================================================================
 .proc objects_level_spawn
-	LDA #OBJECT_POOL_SIZE
+	; The table size is calculated from imported symbols at link time.
+	; '<' forces the expression to be byte-sized for the immediate operand.
+	LDA #<(level_01_objects_type_end - level_01_objects_type)
 	STA object_level_cnt
 	LDY #$00
 
@@ -334,27 +360,40 @@ object_y:      .res OBJECT_POOL_SIZE
 	LDX #$00
 
 @loop:
-	; Check whether object is active
+	; Save current object slot ID.
+	STX object_draw_idx
+
+	; Check whether object is active.
 	LDA object_active, X
 	BEQ @next
 
-	; Save object slot ID because sprite_draw clobbers X
-	STX object_draw_idx
-
-	; Set sprite X coordinate
-	LDA object_x, X
-	STA sprite_x
-
-	; Get object tile from object type
-	LDX object_draw_idx
+	; Get object type.
 	LDA object_type, X
+
+	CMP #OBJECT_TYPE_TREASURE
+	BEQ @treasure
+
+	CMP #OBJECT_TYPE_LIFE
+	BEQ @life
+
+	JMP @next
+
+@treasure:
+	; Get object tile
 	TAX
 	LDA object_tile_tbl, X
-	TAX
+	STA sprite_tile_tmp
+
+	; Get object X coordinate
+	LDY object_draw_idx
+	LDA object_x, Y
+	STA sprite_x
 
 	; Get object Y coordinate
-	LDY object_draw_idx
 	LDA object_y, Y
+
+	; Tile
+	LDX sprite_tile_tmp
 
 	; Attributes
 	LDY #PALETTE_1
@@ -362,10 +401,28 @@ object_y:      .res OBJECT_POOL_SIZE
 	; Draw sprite
 	JSR sprite_draw
 
-	; Restore object slot ID
-	LDX object_draw_idx
+	JMP @next
+
+@life:
+	; Load metasprite pointer
+	LDA #<object_life_metasprite
+	STA ptr_lo
+
+	LDA #>object_life_metasprite
+	STA ptr_hi
+	
+	; Pass object coordinates
+	LDY object_draw_idx
+	LDA object_x, Y
+	LDX object_y, Y
+
+	JSR sprite_draw_meta
+
+	JMP @next
 
 @next:
+	; Restore object slot ID.
+	LDX object_draw_idx
 	INX
 	CPX #OBJECT_POOL_SIZE
 	BNE @loop

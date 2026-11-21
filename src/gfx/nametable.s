@@ -6,19 +6,19 @@
 ; Nametable is used for backgrounds
 ;==========================================================================
 
-.export attribute_table
+.export attr_tbl
 
-attribute_table:
+attr_tbl:
 	.repeat 64
 		.byte $00
 	.endrepeat
-attribute_table_end:
+attr_tbl_end:
 
 ;--------------------------------------------------------------------------
 ; Compile-time checks >>>
 ;--------------------------------------------------------------------------
 
-.assert (attribute_table_end - attribute_table) = 64, error, "Attribute table must be 64 bytes."
+.assert (attr_tbl_end - attr_tbl) = 64, error, "Attribute table must be 64 bytes."
 
 ;--------------------------------------------------------------------------
 ; <<<

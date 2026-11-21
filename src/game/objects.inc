@@ -1,10 +1,10 @@
+OBJECT_POOL_SIZE = 8
+OBJECT_ACTIVE    = 1
+OBJECT_INACTIVE  = 0
+
 ;==========================================================================
 ; Define objects constants and configurations
 ;==========================================================================
-
-OBJECT_POOL_SIZE     = 8
-OBJECT_ACTIVE        = 1
-OBJECT_INACTIVE      = 0
 
 ; Object types, indices must match object dimension tables.
 ;

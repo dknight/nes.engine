@@ -202,7 +202,7 @@ clear_loop:
 	INY
 
 	; Four sprites = 16 bytes.
-	CPY #16
+	CPY #$10
 	BNE @loop
 
 	; Save updated OAM position.

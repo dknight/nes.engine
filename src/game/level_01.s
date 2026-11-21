@@ -10,13 +10,14 @@
 .export level_01_objects_x
 .export level_01_objects_y
 .export level_01_objects_type
+.export level_01_objects_type_end
 
 level_01_objects_x:
-	.byte $20, $A0, $E8, $60
+	.byte $20, $A0, $E8, $60, $E0
 level_01_objects_x_end:
 
 level_01_objects_y:
-	.byte $40, $90, $80, $B0
+	.byte $40, $90, $80, $B0, $B0
 level_01_objects_y_end:
 
 level_01_objects_type:
@@ -24,6 +25,7 @@ level_01_objects_type:
 	.byte OBJECT_TYPE_TREASURE
 	.byte OBJECT_TYPE_TREASURE
 	.byte OBJECT_TYPE_TREASURE
+	.byte OBJECT_TYPE_LIFE
 level_01_objects_type_end:
 
 ;--------------------------------------------------------------------------
