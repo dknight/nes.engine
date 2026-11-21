@@ -49,7 +49,8 @@ basic collision detection.
 
 ## Build
 
-```
+```sh
+./configure
 make
 ```
 
