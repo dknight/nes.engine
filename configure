@@ -7,9 +7,6 @@ REQUIRED_TOOLS=(
 	ld65
 	sim65
 	make
-)
-
-OPTIONAL_TOOLS=(
 	lua
 )
 
@@ -20,21 +17,16 @@ for tool in "${REQUIRED_TOOLS[@]}"; do
 	    echo "Error: '$tool' not found."
 	    exit 1
 	fi
-	version=$("$tool" --version 2>&1 | tr '\n' ' ')
+	version_cmd="--version"
+	if [ "$tool" = "lua" ]; then
+		version_cmd="-v"
+	fi
+	version=$("$tool" "$version_cmd" 2>&1 | tr '\n' ' ')
 	printf 'Found: %s (%s) %s\n' "$tool" "$(command -v "$tool")" "$version"
 done
 
 echo
 echo "Checking optional dependencies..."
-
-for tool in "${OPTIONAL_TOOLS[@]}"; do
-	if command -v "$tool" >/dev/null 2>&1; then
-		version=$("$tool" -v 2>&1 | tr '\n' ' ')
-		printf 'Found: %s (%s) %s\n' "$tool" "$(command -v "$tool")" "$version"
-	else
-		printf 'Info: %s not found. Optional features will be unavailable.\n' "$tool"
-	fi
-done
 
 echo
 echo "All dependencies satisfied."
