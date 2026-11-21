@@ -3,6 +3,7 @@
 .import sprite_clear_oam
 .import player_draw
 .import enemies_draw
+.import objects_draw
 
 .export render
 
@@ -17,6 +18,7 @@
 
 	JSR player_draw
 	JSR enemies_draw
+	JSR objects_draw
 
 	JSR oam_end
 

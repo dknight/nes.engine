@@ -1,3 +1,5 @@
+#!/usr/bin/env lua
+
 -- NES memory usage report
 --
 -- Analyzes memory allocation using the linker configuration

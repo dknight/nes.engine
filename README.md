@@ -49,10 +49,6 @@ Optional dependencies:
 
 - [Lua](https://www.lua.org) - required only for optional tools
 
-Optional for tools:
-
-- [Lua](https://www.lua.org)
-
 ## Build
 
 ```

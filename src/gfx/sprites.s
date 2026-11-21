@@ -5,6 +5,10 @@
 .import oam
 
 .exportzp oam_cursor
+.exportzp sprite_y
+.exportzp sprite_tile
+.exportzp sprite_attr
+.exportzp sprite_x
 .export sprite_clear_oam
 .export oam_begin
 .export oam_end
@@ -33,7 +37,7 @@ metasprite_y: .res 1
 ;   Clear OAM segment
 ;
 ; Clobbers:
-;   A,X
+;   A, X
 ;==========================================================================
 .proc sprite_clear_oam
 	LDA #$FF

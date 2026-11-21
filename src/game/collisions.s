@@ -1,7 +1,7 @@
-.include "collisions.inc"
+.include "level.inc"
 
 .importzp scratch00
-.import level_map_01
+.import level_01_map
 
 .exportzp collisions_ptr
 .exportzp collisions_row_ptr
@@ -49,7 +49,7 @@ row_offset_hi:
 
 	CMP #TILE_WALL
 	BEQ @wall
-	CMP #TILE_NOT_USED
+	CMP #TILE_UNUSED
 	BEQ @wall
 	; CMP #TILE_BRICK
 	; BEQ @wall
@@ -129,10 +129,10 @@ row_offset_hi:
 ;   A
 ;==========================================================================
 .proc collisions_load_level
-	LDA #<level_map_01
+	LDA #<level_01_map
 	STA collisions_ptr
 
-	LDA #>level_map_01
+	LDA #>level_01_map
 	STA collisions_ptr+1
 
 	RTS

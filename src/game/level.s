@@ -1,10 +1,10 @@
 .include "../core/constants.inc"
+.include "level.inc"
 
 .importzp ptr_lo
 .importzp ptr_hi
 .importzp page_count
-.import tile_to_chr
-.import level_map_01
+.import level_01_map
 
 .export level_load
 
@@ -13,8 +13,7 @@
 ;==========================================================================
 ; Load current level into VRAM.
 ;
-; Converts logical tile IDs from the level map into CHR tile indices using
-; tile_to_chr and writes the resulting nametable to VRAM ($2000-$23BF).
+; Writes the level map directly to the nametable in VRAM ($2000-$23BF).
 ;
 ; Input:
 ;   None
@@ -32,7 +31,7 @@
 ;
 ; Requirements:
 ;   - Rendering disabled or PPU in VBlank.
-;   - level_map_01 contains exactly 960 tiles.
+;   - level_01_map contains exactly 960 tiles.
 ;==========================================================================
 .proc level_load
 	; Reset PPU latch
@@ -44,10 +43,10 @@
 	LDA #$00
 	STA PPU_ADDR
 
-	; Pointer -> level_map_01
-	LDA #<level_map_01
+	; Pointer -> level_01_map
+	LDA #<level_01_map
 	STA ptr_lo
-	LDA #>level_map_01
+	LDA #>level_01_map
 	STA ptr_hi
 
 	; Three full pages (3 × 256 = 768 bytes)
@@ -58,14 +57,8 @@
 	LDY #$00
 
 @page_bytes:
-	; Read logical tile
+	; Read tile and write to PPU
 	LDA (ptr_lo),Y
-
-	; Convert to CHR tile
-	TAX
-	LDA tile_to_chr,X
-
-	; Write to PPU
 	STA PPU_DATA
 
 	INY
@@ -81,8 +74,6 @@
 
 @last_chunk:
 	LDA (ptr_lo),Y
-	TAX
-	LDA tile_to_chr,X
 	STA PPU_DATA
 
 	INY

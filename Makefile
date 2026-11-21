@@ -37,6 +37,7 @@ BUILD_DIR ?= builds
 CA65  ?= ca65
 LD65  ?= ld65
 SIM65 ?= sim65
+LUA   ?= lua
 
 #--------------------------------------------------------------------------
 # NES files
@@ -54,6 +55,11 @@ all: $(ROM)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
+
+$(SRC_DIR)/game/level_01.inc: maps/level_01.txt tools/map-coverter.lua
+	$(LUA) tools/map-coverter.lua $< > $@
+
+$(BUILD_DIR)/game/level_01.o: $(SRC_DIR)/game/level_01.inc
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.s
 	@mkdir -p $(dir $@)

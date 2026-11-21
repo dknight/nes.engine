@@ -2,8 +2,6 @@
 .include "include/macros.inc"
 .include "include/vectors.inc"
 
-.export main
-
 .import nmi
 .import irq
 .import render
@@ -12,6 +10,8 @@
 .import timers_update
 .import input_poll
 .import reset
+
+.export main
 
 .segment "CODE"
 

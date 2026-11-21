@@ -1,6 +1,7 @@
 ;==========================================================================
-; Tiles constants
+; Level tiles indexes in CHR
 ;==========================================================================
-TILE_NOT_USED = $01
-TILE_FLOOR    = $A0
-TILE_WALL     = $A2
+TILE_UNUSED = $01
+TILE_FLOOR  = $A0
+TILE_WALL   = $A2
+

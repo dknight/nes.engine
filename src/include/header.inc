@@ -15,7 +15,10 @@ header_bytes:
 	.byte (INES_MAPPER & %11110000)
 	.byte $00, $00, $00, $00, $00, $00, $00, $00 ; padding filled with zeroes
 header_bytes_end:
-	; nop
+
+;--------------------------------------------------------------------------
+; Compile-time checks >>>
+;--------------------------------------------------------------------------
 
 .assert (header_bytes_end - header_bytes) = 16, error, "NES header should be 16 bytes"
 
@@ -25,4 +28,8 @@ header_bytes_end:
 
 .assert INES_MIRROR = 0 .or INES_MIRROR = 1, error, "Invalid mirroring mode"
 .assert INES_SRAM = 0 .or INES_SRAM = 1, error, "Invalid SRAM configuration"
+
+;--------------------------------------------------------------------------
+; <<<
+;--------------------------------------------------------------------------
 

@@ -21,9 +21,7 @@ vblank_counter:     .res 1
 ; NMI Routine: called every vBlank
 ;
 ; Clobbers:
-;  A
-;  X
-;  Y
+;   A, X, Y
 ;==========================================================================
 .proc nmi
 	; Save registers

@@ -3,7 +3,6 @@
 ;==========================================================================
 .segment "ZEROPAGE"
 
-
 .exportzp ptr_lo
 .exportzp ptr_hi
 .exportzp scratch00
@@ -21,6 +20,15 @@ scratch01:  .res 1
 ; Loading level vars
 page_count: .res 1
 
+;--------------------------------------------------------------------------
+; Compile-time checks >>>
+;--------------------------------------------------------------------------
+
 ; Check total Zero Page allocation across all modules.
 .import __ZEROPAGE_SIZE__: absolute
 .assert __ZEROPAGE_SIZE__ <= $100, lderror, "Zero Page exceeds 256 bytes"
+
+;--------------------------------------------------------------------------
+; <<<
+;--------------------------------------------------------------------------
+
