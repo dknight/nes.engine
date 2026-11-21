@@ -26,9 +26,6 @@ for tool in "${REQUIRED_TOOLS[@]}"; do
 done
 
 echo
-echo "Checking optional dependencies..."
-
-echo
 echo "All dependencies satisfied."
 echo "Configuration completed successfully."
 
