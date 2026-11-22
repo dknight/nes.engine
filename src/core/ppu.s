@@ -9,10 +9,19 @@
 .segment "CODE"
 
 ;==========================================================================
-; Load palette into PPU
+; Load the 32-byte palette table into PPU palette memory.
+;
+; Input:
+;   None
+;
+; Output:
+;   PPU palette memory updated.
 ;
 ; Clobbers:
-;  A
+;   A, X
+;
+; Uses:
+;   palettes
 ;==========================================================================
 .proc ppu_load_palette
 	; reset PPU latch
@@ -37,6 +46,21 @@
 	RTS
 .endproc
 
+;==========================================================================
+; Load the 64-byte attribute table into the PPU nametable.
+;
+; Input:
+;   None
+;
+; Output:
+;   PPU attribute table updated.
+;
+; Clobbers:
+;   A, X
+;
+; Uses:
+;   attr_tbl
+;==========================================================================
 .proc ppu_load_attributes
 	; reset latch
 	LDA PPU_STATUS
@@ -59,4 +83,3 @@
 
 	RTS
 .endproc
-

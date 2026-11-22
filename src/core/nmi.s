@@ -18,10 +18,19 @@ vblank_counter:     .res 1
 .segment "CODE"
 
 ;==========================================================================
-; NMI Routine: called every vBlank
+; Handle VBlank by transferring OAM, signaling a frame, and resetting scroll.
+;
+; Input:
+;   None
+;
+; Output:
+;   frame_ready set; PPU scroll reset.
 ;
 ; Clobbers:
-;   A, X, Y
+;   None (A, X, and Y are preserved; RTI restores processor status.)
+;
+; Uses:
+;   frame_ready
 ;==========================================================================
 .proc nmi
 	; Save registers
@@ -59,4 +68,3 @@ vblank_counter:     .res 1
 ;==========================================================================
 irq:
 	RTI
-

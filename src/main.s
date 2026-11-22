@@ -16,7 +16,19 @@
 .segment "CODE"
 
 ;==========================================================================
-; Main application logic section includes the game loop
+; Run the main frame loop: wait, poll input, update timers and game, then render.
+;
+; Input:
+;   None
+;
+; Output:
+;   Does not return; repeatedly processes game frames.
+;
+; Clobbers:
+;   A, X, Y
+;
+; Uses:
+;   None
 ;==========================================================================
 .proc main
 @loop:
@@ -27,4 +39,3 @@
 	JSR render
 	JMP @loop
 .endproc
-

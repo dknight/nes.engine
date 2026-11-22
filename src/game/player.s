@@ -50,9 +50,7 @@ player_metasprite:
 .segment "CODE"
 
 ;==========================================================================
-; Update player position.
-;
-; Processes controller input and updates the player's position.
+; Process controller input and update the player's position.
 ;
 ; Input:
 ;   controller01_state
@@ -61,7 +59,12 @@ player_metasprite:
 ;   player_x and/or player_y may be updated.
 ;
 ; Clobbers:
-;   A, X, Y
+;   A, Y
+;
+; Uses:
+;   controller01_state
+;   player_x
+;   player_y
 ;==========================================================================
 .if PLAYER_DIAGONAL_ENABLED
 	.proc player_update
@@ -85,7 +88,7 @@ player_metasprite:
 .endif
 
 ;==========================================================================
-; Process horizontal player movement.
+; Process horizontal player movement from controller input.
 ;
 ; Input:
 ;   controller01_state
@@ -95,6 +98,9 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   controller01_state
 ;==========================================================================
 .proc player_horizontal_movement
 	LDA controller01_state
@@ -117,7 +123,7 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Process vertical player movement.
+; Process vertical player movement from controller input.
 ;
 ; Input:
 ;   controller01_state
@@ -127,6 +133,9 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   controller01_state
 ;==========================================================================
 .proc player_vertical_movement
 	LDA controller01_state
@@ -149,7 +158,7 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Move player up by PLAYER_SPEED if movement is allowed.
+; Move the player up by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
 ;   player_x (pixels)
@@ -160,6 +169,14 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   player_y
+;   player_next_y
+;   player_x
+;   player_tile_x
+;   player_tile_y
+;   player_collision_end_x
 ;==========================================================================
 .proc player_move_up
 	; Calculate next position
@@ -185,7 +202,7 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Move player right by PLAYER_SPEED if movement is allowed.
+; Move the player right by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
 ;   player_x (pixels)
@@ -196,6 +213,14 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   player_x
+;   player_next_x
+;   player_y
+;   player_tile_x
+;   player_tile_y
+;   player_collision_end_y
 ;==========================================================================
 .proc player_move_right
 	; Calculate next position
@@ -222,7 +247,7 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Move player down by PLAYER_SPEED if movement is allowed.
+; Move the player down by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
 ;   player_x (pixels)
@@ -233,6 +258,14 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   player_y
+;   player_next_y
+;   player_x
+;   player_tile_x
+;   player_tile_y
+;   player_collision_end_x
 ;==========================================================================
 .proc player_move_down
 	; Calculate next position
@@ -258,7 +291,7 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Move player left by PLAYER_SPEED if movement is allowed.
+; Move the player left by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
 ;   player_x (pixels)
@@ -269,6 +302,14 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   player_x
+;   player_next_x
+;   player_y
+;   player_tile_x
+;   player_tile_y
+;   player_collision_end_y
 ;==========================================================================
 .proc player_move_left
 	; Calculate next position
@@ -306,6 +347,14 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   player_x
+;   player_y
+;   player_next_y
+;   player_tile_x
+;   player_tile_y
+;   player_collision_end_x
 ;==========================================================================
 .proc player_check_vertical_collision
 	; Determine movement direction
@@ -384,6 +433,9 @@ player_metasprite:
 ;   player_tile_x
 ;   player_tile_y
 ;   player_collision_end_y
+;   player_next_x
+;   player_x
+;   player_y
 ;==========================================================================
 .proc player_check_horizontal_collision
 	; Determine movement direction
@@ -441,7 +493,7 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Draw player sprite.
+; Draw the player metasprite.
 ;
 ; Input:
 ;   player_x (pixels)
@@ -451,7 +503,13 @@ player_metasprite:
 ;   Player sprite written to OAM.
 ;
 ; Clobbers:
-;   A
+;   A, X, Y
+;
+; Uses:
+;   player_x
+;   player_y
+;   ptr_lo
+;   ptr_hi
 ;==========================================================================
 .proc player_draw
 	; Load metasprite pointer
@@ -471,7 +529,7 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Initialize player position.
+; Initialize the player position.
 ;
 ; Input:
 ;   None
@@ -482,6 +540,10 @@ player_metasprite:
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   player_x
+;   player_y
 ;==========================================================================
 .proc player_init
 	LDA #PLAYER_INIT_X
@@ -492,4 +554,3 @@ player_metasprite:
 
 	RTS
 .endproc
-

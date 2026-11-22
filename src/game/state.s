@@ -16,7 +16,7 @@ game_flags: .res 1
 
 .segment "CODE"
 ;==========================================================================
-; Initialize game state.
+; Initialize the game state and clear all game flags.
 ;
 ; Input:
 ;   None
@@ -27,6 +27,10 @@ game_flags: .res 1
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   game_state
+;   game_flags
 ;==========================================================================
 .proc state_init
 	LDA #GAME_STATE_TITLE
@@ -39,7 +43,7 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Set current game state.
+; Set the current game state.
 ;
 ; Input:
 ;   A = new game state
@@ -49,6 +53,9 @@ game_flags: .res 1
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   game_state
 ;==========================================================================
 .proc state_set
 	STA game_state
@@ -56,7 +63,7 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Compare current game state.
+; Compare the current game state with the value in A.
 ;
 ; Input:
 ;   A = game state to compare
@@ -67,6 +74,9 @@ game_flags: .res 1
 ;
 ; Clobbers:
 ;   P (status flags)
+;
+; Uses:
+;   game_state
 ;==========================================================================
 .proc state_check
 	CMP game_state
@@ -74,7 +84,7 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Set game flags.
+; Set the game flags selected by the mask in A.
 ;
 ; Input:
 ;   A = flag mask
@@ -84,6 +94,9 @@ game_flags: .res 1
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   game_flags
 ;==========================================================================
 .proc state_set_flags
 	ORA game_flags
@@ -92,7 +105,7 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Clear game flags.
+; Clear the game flags selected by the mask in A.
 ;
 ; Input:
 ;   A = flag mask
@@ -102,6 +115,9 @@ game_flags: .res 1
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   game_flags
 ;==========================================================================
 .proc state_clear_flags
 	EOR #$FF
@@ -111,7 +127,7 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Check game flags.
+; Test whether any game flags selected by the mask in A are set.
 ;
 ; Input:
 ;   A = flag mask
@@ -119,9 +135,14 @@ game_flags: .res 1
 ; Output:
 ;   Z = 1 if none of the specified flags are set.
 ;   Z = 0 if any specified flag is set.
+;
+; Clobbers:
+;   A, P (status flags)
+;
+; Uses:
+;   game_flags
 ;==========================================================================
 .proc state_check_flags
 	AND game_flags
 	RTS
 .endproc
-

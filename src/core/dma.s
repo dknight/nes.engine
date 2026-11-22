@@ -8,11 +8,19 @@
 .segment "CODE"
 
 ;==========================================================================
-; Copies OAM shadow buffer to PPU OAM using DMA.
-; Must be called during VBlank.
+; Copy the OAM shadow buffer to PPU OAM using DMA during VBlank.
+;
+; Input:
+;   None
+;
+; Output:
+;   PPU OAM updated from the OAM shadow buffer.
 ;
 ; Clobbers:
-;  A
+;   A
+;
+; Uses:
+;   oam
 ;==========================================================================
 .proc dma_transfer
 	LDA #$00
@@ -22,4 +30,3 @@
 	STA OAM_DMA
 	RTS
 .endproc
-

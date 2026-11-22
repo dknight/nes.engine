@@ -30,14 +30,19 @@ metasprite_y: .res 1
 .segment "CODE"
 
 ;==========================================================================
+; Fill the OAM shadow buffer with $FF to hide all sprites.
+;
 ; Input:
 ;   None
 ;
 ; Output:
-;   Clear OAM segment
+;   OAM shadow buffer filled with $FF.
 ;
 ; Clobbers:
 ;   A, X
+;
+; Uses:
+;   oam
 ;==========================================================================
 .proc sprite_clear_oam
 	LDA #$FF
@@ -57,7 +62,7 @@ clear_loop:
 .endproc
 
 ;==========================================================================
-; Begin OAM update.
+; Begin an OAM update by resetting the OAM cursor.
 ;
 ; Input:
 ;   None
@@ -67,6 +72,9 @@ clear_loop:
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   oam_cursor
 ;==========================================================================
 .proc oam_begin
 	LDA #$00
@@ -75,14 +83,19 @@ clear_loop:
 .endproc
 
 ;==========================================================================
+; Transfer the OAM shadow buffer to PPU OAM using DMA.
+;
 ; Input:
 ;   None
 ;
 ; Output:
-;   End OAM segment
+;   OAM shadow buffer copied to PPU OAM.
 ;
 ; Clobbers:
-;   None
+;   A
+;
+; Uses:
+;   oam
 ;==========================================================================
 .proc oam_end
 	JSR dma_transfer
@@ -90,7 +103,7 @@ clear_loop:
 .endproc
 
 ;==========================================================================
-; Draw a single 8x8 hardware sprite.
+; Draw a single 8x8 hardware sprite (OAM format: Y, TILE, ATTR, X).
 ;
 ; Input:
 ;   A - Y coordinate
@@ -102,11 +115,16 @@ clear_loop:
 ;   One sprite written to OAM.
 ;   OAM cursor advanced by 4 bytes.
 ;
-; OAM format:
-;   Y, TILE, ATTR, X
-;
 ; Clobbers:
 ;   A, X, Y
+;
+; Uses:
+;   oam
+;   oam_cursor
+;   sprite_y
+;   sprite_tile
+;   sprite_attr
+;   sprite_x
 ;==========================================================================
 .proc sprite_draw
 	; Save input parameters.
@@ -147,14 +165,12 @@ clear_loop:
 
 ;==========================================================================
 ; Draw a 16x16 metasprite using four 8x8 hardware sprites.
+; Each entry contains Y offset, CHR tile, OAM attributes, and X offset.
 ;
 ; Input:
 ;   ptr_lo / ptr_hi - pointer to metasprite data
 ;   A - Base X position
 ;   X - Base Y position
-;
-; Data format:
-;   Y offset, CHR tile, OAM attributes, X offset
 ;
 ; Output:
 ;   Four sprites written to OAM.
@@ -162,6 +178,14 @@ clear_loop:
 ;
 ; Clobbers:
 ;   A, X, Y
+;
+; Uses:
+;   oam
+;   oam_cursor
+;   ptr_hi
+;   ptr_lo
+;   metasprite_x
+;   metasprite_y
 ;==========================================================================
 .proc sprite_draw_meta
 	STA metasprite_x
@@ -210,4 +234,3 @@ clear_loop:
 
 	RTS
 .endproc
-

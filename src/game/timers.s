@@ -10,9 +10,7 @@
 .segment "CODE"
 
 ;==========================================================================
-; Update game timers.
-;
-; Increments the VBlank counter and updates the game timer.
+; Increment the VBlank counter and update the game timer.
 ;
 ; Input:
 ;   None
@@ -23,6 +21,10 @@
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   vblank_counter
+;   game_timer
 ;==========================================================================
 .proc timers_update
 	INC vblank_counter
@@ -39,9 +41,7 @@
 .endproc
 
 ;==========================================================================
-; Wait for the next frame.
-;
-; Blocks until frame_ready is set by the NMI handler, then clears the flag.
+; Wait until the NMI handler signals a frame, then clear the flag.
 ;
 ; Input:
 ;   None
@@ -51,6 +51,9 @@
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   frame_ready
 ;==========================================================================
 .proc wait_frame
 @wait:
@@ -61,4 +64,3 @@
 	STA frame_ready
 	RTS
 .endproc
-

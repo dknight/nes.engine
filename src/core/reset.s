@@ -11,7 +11,19 @@
 .segment "CODE"
 
 ;==========================================================================
-; Reset code
+; Initialize the NES hardware and game, then transfer control to main.
+;
+; Input:
+;   None
+;
+; Output:
+;   Does not return; jumps to main after initialization.
+;
+; Clobbers:
+;   A, X, Y
+;
+; Uses:
+;   None
 ;==========================================================================
 .proc reset
 	SEI						; mask interrupts
@@ -95,4 +107,3 @@ wait_vblank2:
 	
 	JMP main
 .endproc
-

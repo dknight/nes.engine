@@ -31,7 +31,7 @@ row_offset_hi:
 .segment "CODE"
 
 ;==========================================================================
-; Check whether the tile is solid.
+; Check whether the tile at the specified coordinates blocks movement.
 ;
 ; Input:
 ;   A = tile_x (0..31)
@@ -42,7 +42,12 @@ row_offset_hi:
 ;   C = 0 if the tile is passable.
 ;
 ; Clobbers:
-;   A
+;   A, Y
+;
+; Uses:
+;   collisions_ptr
+;   collisions_row_ptr
+;   scratch00
 ;==========================================================================
 .proc collisions_is_solid
 	JSR collisions_get_tile
@@ -65,7 +70,7 @@ row_offset_hi:
 .endproc
 
 ;==========================================================================
-; Get logical tile ID at tile coordinates.
+; Get the logical tile ID at the specified tile coordinates.
 ;
 ; Input:
 ;   A = tile_x (0..31)
@@ -79,6 +84,8 @@ row_offset_hi:
 ;
 ; Uses:
 ;   scratch00
+;   collisions_ptr
+;   collisions_row_ptr
 ;==========================================================================
 .proc collisions_get_tile
 	STA scratch00
@@ -92,7 +99,7 @@ row_offset_hi:
 .endproc
 
 ;==========================================================================
-; Calculate pointer to the specified tile row.
+; Calculate a pointer to the specified tile row in the collision map.
 ;
 ; Input:
 ;   Y = tile_y
@@ -102,6 +109,10 @@ row_offset_hi:
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   collisions_ptr
+;   collisions_row_ptr
 ;==========================================================================
 .proc collisions_get_row_ptr
 	LDA collisions_ptr
@@ -117,7 +128,7 @@ row_offset_hi:
 .endproc
 
 ;==========================================================================
-; Initialize collision map pointer.
+; Set the collision map pointer to the current level map.
 ;
 ; Input:
 ;   None
@@ -127,6 +138,9 @@ row_offset_hi:
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   collisions_ptr
 ;==========================================================================
 .proc collisions_load_level
 	LDA #<level_01_map
@@ -137,4 +151,3 @@ row_offset_hi:
 
 	RTS
 .endproc
-

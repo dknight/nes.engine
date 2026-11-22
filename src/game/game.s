@@ -15,7 +15,7 @@ game_timer: .res 1
 .segment "CODE"
 
 ;==========================================================================
-; Initialize game state.
+; Initialize game systems and load the first level.
 ;
 ; Input:
 ;   None
@@ -25,6 +25,9 @@ game_timer: .res 1
 ;
 ; Clobbers:
 ;   A, X, Y
+;
+; Uses:
+;   game_timer
 ;==========================================================================
 .proc game_init
 	JSR collisions_load_level
@@ -40,4 +43,3 @@ game_timer: .res 1
 
 	RTS
 .endproc
-

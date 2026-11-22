@@ -95,7 +95,7 @@ object_y:      .res OBJECT_POOL_SIZE
 .segment "CODE"
 
 ;==========================================================================
-; Initialize object pool.
+; Mark every object slot as inactive.
 ;
 ; Input:
 ;   None
@@ -105,6 +105,9 @@ object_y:      .res OBJECT_POOL_SIZE
 ;
 ; Clobbers:
 ;   A, X
+;
+; Uses:
+;   object_active
 ;==========================================================================
 .proc objects_pool_init
 	LDX #OBJECT_POOL_SIZE - 1
@@ -120,7 +123,7 @@ object_y:      .res OBJECT_POOL_SIZE
 .endproc
 
 ;==========================================================================
-; Find an empty slot in the object pool.
+; Find and activate the first free slot in the object pool.
 ;
 ; Input:
 ;   None
@@ -130,6 +133,9 @@ object_y:      .res OBJECT_POOL_SIZE
 ;
 ; Clobbers:
 ;   A, X
+;
+; Uses:
+;   object_active
 ;==========================================================================
 .proc object_spawn
 	LDX #$00 ; index of objects array
@@ -154,14 +160,27 @@ object_y:      .res OBJECT_POOL_SIZE
 .endproc
 
 ;==========================================================================
-; Spawn predefined objects for the current level.
+; Spawn the objects defined for the current level.
 ;
-; Uses:
-;   OBJECT_POOL_SIZE - Number of objects to process
+; Input:
+;   None
+;
+; Output:
+;   Level objects added to available pool slots.
 ;
 ; Clobbers:
-;   A, Y
+;   A, X, Y
 ;
+; Uses:
+;   object_level_idx
+;   object_level_cnt
+;   level_01_objects_type
+;   level_01_objects_x
+;   level_01_objects_y
+;   object_active
+;   object_type
+;   object_x
+;   object_y
 ;==========================================================================
 .proc objects_level_spawn
 	; The table size is calculated from imported symbols at link time.
@@ -208,7 +227,7 @@ object_y:      .res OBJECT_POOL_SIZE
 .endproc
 
 ;==========================================================================
-; Despawn object from the pool.
+; Mark the specified object slot as inactive.
 ;
 ; Input:
 ;   X - Object slot ID
@@ -219,6 +238,9 @@ object_y:      .res OBJECT_POOL_SIZE
 ;
 ; Clobbers:
 ;   A
+;
+; Uses:
+;   object_active
 ;==========================================================================
 .proc object_despawn
 	CPX #OBJECT_POOL_SIZE
@@ -235,7 +257,7 @@ object_y:      .res OBJECT_POOL_SIZE
 .endproc
 
 ;==========================================================================
-; Clear all objects in the pool.
+; Clear all arrays in the object pool.
 ;
 ; Input:
 ;   None
@@ -245,6 +267,12 @@ object_y:      .res OBJECT_POOL_SIZE
 ;
 ; Clobbers:
 ;   A, X
+;
+; Uses:
+;   object_active
+;   object_type
+;   object_x
+;   object_y
 ;==========================================================================
 .proc objects_pool_clear
 	LDX #OBJECT_POOL_SIZE - 1
@@ -263,10 +291,10 @@ object_y:      .res OBJECT_POOL_SIZE
 .endproc
 
 ;==========================================================================
-; Object setters. Carry Flag is modified; other flags are undefined.
+; Set an object's X coordinate.
 ;
 ; Input:
-;   A - Value of the property
+;   A - X coordinate
 ;   X - Object ID (slot index)
 ;
 ; Output:
@@ -275,6 +303,9 @@ object_y:      .res OBJECT_POOL_SIZE
 ;
 ; Clobbers:
 ;   None
+;
+; Uses:
+;   object_x
 ;==========================================================================
 .proc object_set_x
 	CPX #OBJECT_POOL_SIZE
@@ -291,6 +322,23 @@ object_y:      .res OBJECT_POOL_SIZE
 	RTS
 .endproc
 
+;==========================================================================
+; Set an object's type.
+;
+; Input:
+;   A - Object type index
+;   X - Object ID (slot index)
+;
+; Output:
+;   C - 0: Success
+;   C - 1: Invalid Object ID
+;
+; Clobbers:
+;   None
+;
+; Uses:
+;   object_type
+;==========================================================================
 .proc object_set_type
 	CPX #OBJECT_POOL_SIZE
 	BCS @invalid_id
@@ -306,6 +354,23 @@ object_y:      .res OBJECT_POOL_SIZE
 	RTS
 .endproc
 
+;==========================================================================
+; Set an object's Y coordinate.
+;
+; Input:
+;   A - Y coordinate
+;   X - Object ID (slot index)
+;
+; Output:
+;   C - 0: Success
+;   C - 1: Invalid Object ID
+;
+; Clobbers:
+;   None
+;
+; Uses:
+;   object_y
+;==========================================================================
 .proc object_set_y
 	CPX #OBJECT_POOL_SIZE
 	BCS @invalid_id
@@ -322,7 +387,7 @@ object_y:      .res OBJECT_POOL_SIZE
 .endproc
 
 ;==========================================================================
-; Object dimension getters.
+; Get an object's width from its type.
 ;
 ; Input:
 ;   X - Object index
@@ -333,7 +398,13 @@ object_y:      .res OBJECT_POOL_SIZE
 ;
 ; Clobbers:
 ;   A, Y
+;
+; Uses:
+;   object_type
+;   object_width_tbl
+;   object_height_tbl
 ;==========================================================================
+; Get an object's height from its type.
 .proc object_get_width
 	LDA object_type, X
 	TAY
@@ -341,6 +412,21 @@ object_y:      .res OBJECT_POOL_SIZE
 	RTS
 .endproc
 
+;
+; Input:
+;   X - Object index
+;
+; Output:
+;   A - Object height
+;   Y - Object type index
+;
+; Clobbers:
+;   A, Y
+;
+; Uses:
+;   object_type
+;   object_height_tbl
+;==========================================================================
 .proc object_get_height
 	LDA object_type, X
 	TAY
@@ -349,12 +435,29 @@ object_y:      .res OBJECT_POOL_SIZE
 .endproc
 
 ;==========================================================================
-; Draw all active objects in the object pool.
+; Draw all active supported objects in the object pool.
 ;
-; Supports 8x8 objects only.
+; Supports 8x8 objects and the life metasprite.
+;
+; Input:
+;   None
+;
+; Output:
+;   Active supported objects written to OAM.
 ;
 ; Clobbers:
 ;   A, X, Y
+;
+; Uses:
+;   object_active
+;   object_type
+;   object_x
+;   object_y
+;   object_draw_idx
+;   sprite_tile_tmp
+;   ptr_lo
+;   ptr_hi
+;   sprite_x
 ;==========================================================================
 .proc objects_draw
 	LDX #$00
@@ -430,4 +533,3 @@ object_y:      .res OBJECT_POOL_SIZE
 @done:
 	RTS
 .endproc
-

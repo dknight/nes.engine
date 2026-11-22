@@ -11,9 +11,10 @@
 .segment "CODE"
 
 ;==========================================================================
-; Load current level into VRAM.
-;
-; Writes the level map directly to the nametable in VRAM ($2000-$23BF).
+; Load the current level map into the PPU nametable.
+; The map is written directly to VRAM ($2000-$23BF). Rendering must be
+; disabled or the PPU must be in VBlank, and level_01_map must contain
+; exactly 960 tiles.
 ;
 ; Input:
 ;   None
@@ -28,10 +29,6 @@
 ;   ptr_lo
 ;   ptr_hi
 ;   page_count
-;
-; Requirements:
-;   - Rendering disabled or PPU in VBlank.
-;   - level_01_map contains exactly 960 tiles.
 ;==========================================================================
 .proc level_load
 	; Reset PPU latch
@@ -82,4 +79,3 @@
 
 	RTS
 .endproc
-

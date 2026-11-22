@@ -8,6 +8,8 @@
 .segment "CODE"
 
 ;==========================================================================
+; Update all game systems for one game tick.
+;
 ; Input:
 ;   None
 ;
@@ -16,6 +18,9 @@
 ;
 ; Clobbers:
 ;   A, X, Y
+;
+; Uses:
+;   None
 ;==========================================================================
 .proc game_tick
 	JSR player_update
@@ -24,4 +29,3 @@
 	JSR camera_update
 	RTS
 .endproc
-
