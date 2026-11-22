@@ -1,7 +1,8 @@
+.vscode
+.idea
 *.o
 *.nes
 *.zip
 *.nes.dbg
 *.nes.map
-notes.txt
-builds/
+/build

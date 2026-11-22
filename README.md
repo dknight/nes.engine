@@ -85,7 +85,7 @@ Build artifacts are saved in the **builds/** directory.
 ```
 .
 ├── assets/         CHR graphics and other binary assets
-├── builds/         Build output
+├── build/          Build output
 ├── docs/           Project documentation
 ├── maps/           Level map source files
 ├── src/
