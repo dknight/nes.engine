@@ -30,6 +30,7 @@ EMU ?= fceux
 #--------------------------------------------------------------------------
 SRC_DIR   ?= src
 BUILD_DIR ?= build
+MAPS_DIR  ?= $(SRC_DIR)/game/maps
 
 #--------------------------------------------------------------------------
 # Tools
@@ -56,7 +57,7 @@ all: $(ROM)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-$(SRC_DIR)/game/level_01.inc: maps/level_01.txt tools/map-coverter.lua
+$(SRC_DIR)/game/level_01.inc: $(MAPS_DIR)/level_01.txt tools/map-coverter.lua
 	$(LUA) tools/map-coverter.lua $< > $@
 
 $(BUILD_DIR)/game/level_01.o: $(SRC_DIR)/game/level_01.inc

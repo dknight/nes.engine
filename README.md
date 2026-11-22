@@ -54,13 +54,13 @@ basic collision detection.
 make
 ```
 
-Build artifacts are saved in the **builds/** directory.
+Build artifacts are saved in the **build/** directory.
 
 ### Make commands
 
 - `make` - build ROM;
 - `make run` - build and run in emulator;
-- `make clean` - deletes build artifacts and **builds/** directory;
+- `make clean` - deletes build artifacts and **build/** directory;
 - `make simulate` - not used currently in this project, emulate 6502 assembler program;
 - `make map` - output memory map.
 
