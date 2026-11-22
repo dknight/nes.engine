@@ -4,6 +4,11 @@
 -- with RGB backgrounds and readable hexadecimal indices.
 -- Highlights color $0D and warns about potential compatibility issues.
 
+local script_dir = arg[0]:match("(.*[/\\])") or "./"
+package.path = script_dir .. "?.lua;" .. package.path
+
+local ansi = require("ansicolors")
+
 local colors = {
 	"98 98 98", "00 00 BB", "37 00 BF", "84 00 A6",
 	"BB 00 6A", "B7 00 1E", "B1 00 00", "91 26 00",
@@ -39,6 +44,34 @@ local function linearize(value)
 	return ((value + 0.055) / 1.055) ^ 2.4
 end
 
+-- Format a palette cell with a true-color ANSI background.
+local function format_palette_cell(index, r, g, b)
+	local luminance =
+		0.2126 * linearize(r) +
+		0.7152 * linearize(g) +
+		0.0722 * linearize(b)
+
+	local fg = luminance > 0.179
+		and "\27[38;2;0;0;0m"
+		or "\27[38;2;255;255;255m"
+
+	local marker = index == 13 and "!" or " "
+
+	return string.format(
+		"\27[1;48;2;%d;%d;%dm%s%s$%02X %s ",
+		r, g, b,
+		fg,
+		marker,
+		index,
+		RESET
+	)
+end
+
+local function print_warning()
+	io.write(ansi("%{bright white redbg}WARNING!  Do not use color $0D!") .. "\n")
+	io.write(ansi("%{bright}It results in a 'blacker than black' signal that may cause problems for some TVs.") .. "\n")
+end
+
 -- Display palette as a 4x16 table.
 for row = 0, 3 do
 	for col = 0, 15 do
@@ -49,35 +82,10 @@ for row = 0, 3 do
 		g = tonumber(g, 16)
 		b = tonumber(b, 16)
 
-		-- Calculate relative luminance.
-		local luminance =
-			0.2126 * linearize(r) +
-			0.7152 * linearize(g) +
-			0.0722 * linearize(b)
-
-		-- Select contrasting foreground color.
-		local fg
-
-		if luminance > 0.179 then
-			fg = "\27[38;2;0;0;0m"
-		else
-			fg = "\27[38;2;255;255;255m"
-		end
-
-		local marker = index == 13 and "!" or " "
-
-		io.write(string.format(
-			"\27[1;48;2;%d;%d;%dm%s%s$%02X %s ",
-			r, g, b,
-			fg,
-			marker,
-			index,
-			RESET
-		))
+		io.write(format_palette_cell(index, r, g, b))
 	end
 
 	io.write("\n\n")
 end
 
-io.write("\27[1;97;41mWARNING!  Do not use color $0D!\27[0m\n")
-io.write("\27[1mIt results in a 'blacker than black' signal that may cause problems for some TVs.\27[0m\n")
+print_warning()

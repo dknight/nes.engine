@@ -12,6 +12,17 @@ NES_CONFIG = "nes.cfg"
 
 local script_path = arg[0]
 local nesfile_path = arg[1]
+local script_dir = script_path:match("(.*[/\\])") or "./"
+package.path = script_dir .. "?.lua;" .. package.path
+
+local ansi = require("ansicolors")
+
+local reserved_segments = {
+	OAM_RAM = true,
+	STACK = true,
+	HDR = true,
+	CHR = true,
+}
 
 -- Error reporter helper
 local function report_error(err)
@@ -144,6 +155,25 @@ local function help()
 	print(string.format("Usage: lua %s <filename.map>", script_path))
 end
 
+local function format_available(memory)
+	local available = string.format("%5d bytes", memory.available)
+
+	if reserved_segments[memory.name] then
+		return ansi("%{cyan}" .. available)
+	end
+
+	local color
+	if memory.usage < 60 then
+		color = "green"
+	elseif memory.usage >= 90 then
+		color = "red"
+	else
+		color = "yellow"
+	end
+
+	return ansi("%{" .. color .. "}" .. available)
+end
+
 local function main()
 	local errors = {}
 	local mem_data
@@ -202,16 +232,19 @@ local function main()
 	})
 
 	for _, memory in ipairs(report) do
-		local label = memory.reserved and "Reserved" or "Used"
+		local label = reserved_segments[memory.name] and "Reserved" or "Used"
+		local name = string.format("%-10s", memory.name)
+
+		local usage = string.format("%5d / %5d bytes", memory.used, memory.total)
+		local percentage = string.format("%5.1f%%", memory.usage)
 
 		print(string.format(
-			"%-10s %-8s %5d / %5d bytes (%5.1f%%) Available: %5d bytes",
-			memory.name,
+			"%s %-8s %s (%s) Available: %s",
+			name,
 			label,
-			memory.used,
-			memory.total,
-			memory.usage,
-			memory.available
+			usage,
+			percentage,
+			format_available(memory)
 		))
 	end
 end

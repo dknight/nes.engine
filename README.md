@@ -119,5 +119,6 @@ plugin for Neovim.
 ## License
 
 - MIT
+- [ansicolors.lua](https://github.com/kikito/ansicolors.lua) MIT
 - NES/Famicom is a trademark of [Nintendo Co., Ltd](https://www.nintendo.com/).
 
