@@ -2,6 +2,6 @@
 ; Level tiles indexes in CHR
 ;==========================================================================
 TILE_UNUSED = $01
-TILE_FLOOR  = $A0
-TILE_WALL   = $A2
+TILE_FLOOR  = $90
+TILE_WALL   = $92
 

@@ -42,10 +42,10 @@ player_collision_end_x: .res 1
 ;   Y, TILE, ATTR, X
 ;==========================================================================
 player_metasprite:
-	.byte 0, $40, PALETTE_0, 0
-	.byte 0, $41, PALETTE_0, 8
-	.byte 8, $50, PALETTE_0, 0
-	.byte 8, $51, PALETTE_0, 8
+	.byte 0, $30, PALETTE_0, 0
+	.byte 0, $31, PALETTE_0, 8
+	.byte 8, $40, PALETTE_0, 0
+	.byte 8, $41, PALETTE_0, 8
 
 .segment "CODE"
 

@@ -59,10 +59,11 @@ object_tile_tbl:
 object_tile_tbl_end:
 
 object_life_metasprite:
-	.byte 0, $42, PALETTE_1, 0
-	.byte 0, $43, PALETTE_1, 8
-	.byte 8, $52, PALETTE_1, 0
-	.byte 8, $53, PALETTE_1, 8
+	.byte 0, $32, PALETTE_1, 0
+	.byte 0, $33, PALETTE_1, 8
+	.byte 8, $42, PALETTE_1, 0
+	.byte 8, $43, PALETTE_1, 8
+object_life_metasprite_end:
 
 ;--------------------------------------------------------------------------
 ; Compile-time checks >>>

@@ -25,6 +25,6 @@ OBJECT_TYPE_LIFE     = 1
 ; Object indexes in CHR
 ;==========================================================================
 
-TILE_TREASURE = $44
+TILE_TREASURE = $34
 TILE_LIFE     = $42
 
