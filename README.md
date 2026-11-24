@@ -45,7 +45,8 @@ basic collision detection.
 - [cc65](https://cc65.github.io/)
 - [GNU Make](https://www.gnu.org/software/make/)
 - [GNU Bash](https://www.gnu.org/software/bash/) or a POSIX-compatible shell for running `configure` and project scripts
-- [Lua](https://www.lua.org) - required only for optional tools.
+- [Lua](https://www.lua.org) - required only for optional tools and maps
+  generation from human readable text files to TILE format.
 
 ## Build
 
